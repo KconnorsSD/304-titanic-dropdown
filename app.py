@@ -75,7 +75,7 @@ def display_value(continuous_var):
 
     mylayout = go.Layout(
         title='Grouped bar chart',
-        xaxis = dict(title = 'Port of Embarkation'), # x-axis label
+        xaxis = dict(title = 'port of Embarkation'), # x-axis label
         yaxis = dict(title = str(continuous_var)), # y-axis label
 
     )
