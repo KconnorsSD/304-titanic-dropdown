@@ -20,8 +20,8 @@ githublink = 'https://github.com/KconnorsSD/304-titanic-dropdown'
 ###### Import a dataframe #######
 df = pd.read_csv("https://raw.githubusercontent.com/austinlasseter/plotly_dash_tutorial/master/00%20resources/titanic.csv")
 df['Male']=df['Sex'].map({'male':0, 'female':1})
-df['Cabin Class'] = df['Pclass'].map({1:'first', 2: 'second', 3:'third'})
-variables_list=['Survived', 'Male', 'Fare', 'Age']
+df['Survivor'] = df['Survived'].map({0:'Died', 1: 'Lived'})
+variables_list=['Pclass', 'Male', 'Fare', 'Age']
 
 ########### Initiate the app
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
@@ -49,35 +49,29 @@ app.layout = html.Div([
 @app.callback(Output('display-value', 'figure'),
               [Input('dropdown', 'value')])
 def display_value(continuous_var):
-    grouped_mean=df.groupby(['Cabin Class', 'Embarked'])[continuous_var].mean()
+    grouped_mean=df.groupby(['Survivor', 'Embarked'])[continuous_var].mean()
     results=pd.DataFrame(grouped_mean)
     # Create a grouped bar chart
     mydata1 = go.Bar(
-        x=results.loc['first'].index,
-        y=results.loc['first'][continuous_var],
-        name='First Class',
+        x=results.loc['Died'].index,
+        y=results.loc['Died'][continuous_var],
+        name='Did not make it',
         marker=dict(color=color1)
     )
     mydata2 = go.Bar(
-        x=results.loc['second'].index,
-        y=results.loc['second'][continuous_var],
-        name='Second Class',
+        x=results.loc['Lived'].index,
+        y=results.loc['Lived'][continuous_var],
+        name='Lucky One',
         marker=dict(color=color2)
     )
-    mydata3 = go.Bar(
-        x=results.loc['third'].index,
-        y=results.loc['third'][continuous_var],
-        name='Third Class',
-        marker=dict(color=color3)
-    )
-
+    
     mylayout = go.Layout(
         title='Grouped bar chart',
         xaxis = dict(title = 'place of embarkation'), # x-axis label
         yaxis = dict(title = str(continuous_var)), # y-axis label
 
     )
-    fig = go.Figure(data=[mydata1, mydata2, mydata3], layout=mylayout)
+    fig = go.Figure(data=[mydata1, mydata2], layout=mylayout)
     return fig
 
 
