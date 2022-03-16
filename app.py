@@ -21,7 +21,7 @@ githublink = 'https://github.com/KconnorsSD/304-titanic-dropdown'
 df = pd.read_csv("https://raw.githubusercontent.com/austinlasseter/plotly_dash_tutorial/master/00%20resources/titanic.csv")
 df['Survivor'] = df['Survived'].map({0:'Died', 1:'Lived'})
 df['Cabin Class'] = df['Pclass'].map({1:'first', 2:'second', 3:'third'}) 
-df['Male'] = df['Sex'].map({'Male':0, 'Female'"1})
+df['Male'] = df['Sex'].map({'male':0, 'female':1})
 
 variables_list=['Cabin Class', 'Male', 'Fare', 'Age'] 
 
