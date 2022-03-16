@@ -23,7 +23,7 @@ df['Survivor'] = df['Survived'].map({0:'Died', 1:'Lived'})
 df['Cabin Class'] = df['Pclass'].map({1:'first', 2:'second', 3:'third'}) 
 df['Male'] = df['Sex'].map({'male':0, 'female':1})
 
-variables_list=['Cabin Class', 'Male', 'Fare', 'Age'] 
+variables_list=['Survivor', 'Male', 'Fare', 'Age'] 
 
 ########### Initiate the app
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
@@ -51,29 +51,35 @@ app.layout = html.Div([
 @app.callback(Output('display-value', 'figure'),
               [Input('dropdown', 'value')])
 def display_value(continuous_var):
-    grouped_mean=df.groupby(['Survivor', 'Embarked'])[continuous_var].mean()
+    grouped_mean=df.groupby(['Cabin Class', 'Embarked'])[continuous_var].mean()
     results=pd.DataFrame(grouped_mean)
     # Create a grouped bar chart
     mydata1 = go.Bar(
-        x=results.loc['Died'].index,
-        y=results.loc['Died'][continuous_var],
-        name='Did not make it',
+        x=results.loc['first'].index,
+        y=results.loc['first'][continuous_var],
+        name='First Class',
         marker=dict(color=color1)
     )
     mydata2 = go.Bar(
-        x=results.loc['Lived'].index,
-        y=results.loc['Lived'][continuous_var],
-        name='Lucky One',
+        x=results.loc['second'].index,
+        y=results.loc['second'][continuous_var],
+        name='Second Class',
         marker=dict(color=color2)
     )
-    
+    mydata3 = go.Bar(
+        x=results.loc['third'].index,
+        y=results.loc['third'][continuous_var],
+        name='Third Class',
+        marker=dict(color=color3)
+    )
+
     mylayout = go.Layout(
         title='Grouped bar chart',
-        xaxis = dict(title = 'place of embarkation'), # x-axis label
+        xaxis = dict(title = 'Port of Embarkation'), # x-axis label
         yaxis = dict(title = str(continuous_var)), # y-axis label
 
     )
-    fig = go.Figure(data=[mydata1, mydata2], layout=mylayout)
+    fig = go.Figure(data=[mydata1, mydata2, mydata3], layout=mylayout)
     return fig
 
 
