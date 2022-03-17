@@ -9,10 +9,11 @@ import plotly.graph_objs as go
 
 
 ###### Define your variables #####
+#Added in Emearl Green for St Patricks Day
 tabtitle = 'Chi Town!'
-color1='#92A5E8'
-color2='#8E44AD'
-color3='#FFC300'
+color1='#00C957'
+color2='#FF0000'
+color3='#4876FF'
 sourceurl = 'https://vck9grfshbi2or0.studio.us-east-2.sagemaker.aws/studiolab/default/jupyter/lab/tree/intuit-ga-dat15/projects/304-titanic-dropdown/app.py'
 githublink = 'https://github.com/KconnorsSD/304-titanic-dropdown'
 
@@ -20,6 +21,7 @@ githublink = 'https://github.com/KconnorsSD/304-titanic-dropdown'
 ###### Import a dataframe #######
 df = pd.read_csv('Data/chicago2.csv')
 df['Baths']=df['Bath'].map({2:'two', 3:'three', 4:'four'})
+#modified data to include Condos and translated sq ft from a label to a number
 variables_list=['Price', 'CrimeIndex', 'MinutesToLoop', 'SchoolIndex', 'HouseSizeSqFt']
 
 ########### Initiate the app
