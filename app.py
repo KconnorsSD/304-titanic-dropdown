@@ -20,7 +20,7 @@ githublink = 'https://github.com/KconnorsSD/304-titanic-dropdown'
 
 ###### Import a dataframe #######
 df = pd.read_csv('Data/chicago2.csv')
-df['Home Types']=df['HouseType'].map({'Condo':'Condominiums', 'Single-Family Home':'Single Family House', 'Multi-family Home':'Multi-Family Home'})
+df['Bathrooms']=df['Bath'].map({1:'One', 2:'Two', 3:'Three'})
 variables_list=['Price', 'CrimeIndex', 'MinutesToLoop', 'SchoolIndex', 'HouseSizeSqFt']
 
 ########### Initiate the app
@@ -51,25 +51,25 @@ app.layout = html.Div([
 @app.callback(Output('display-value', 'figure'),
               [Input('dropdown', 'value')])
 def display_value(continuous_var):
-    grouped_mean=df.groupby(['Home Types', 'Bath'])[continuous_var].mean()
+    grouped_mean=df.groupby(['Bathrooms', 'HomeType'])[continuous_var].mean()
     results=pd.DataFrame(grouped_mean)
     # Create a grouped bar chart
     mydata1 = go.Bar(
-        x=results.loc['Condominiums'].index,
-        y=results.loc['Condominiums'][continuous_var],
-        name='Condominiums',
+        x=results.loc['One'].index,
+        y=results.loc['One'][continuous_var],
+        name='One Bath',
         marker=dict(color=color1)
     )
     mydata2 = go.Bar(
-        x=results.loc['Single Family House'].index,
-        y=results.loc['Single Family House'][continuous_var],
-        name='Single Family House',
+        x=results.loc['Two'].index,
+        y=results.loc['Two'][continuous_var],
+        name='Two Baths',
         marker=dict(color=color2)
     )
     mydata3 = go.Bar(
-        x=results.loc['Multi-Family Home'].index,
-        y=results.loc['Multi-Family Home'][continuous_var],
-        name='Multi-Family Home',
+        x=results.loc['Three'].index,
+        y=results.loc['Three'][continuous_var],
+        name='Three Baths',
         marker=dict(color=color3)
     )
 
