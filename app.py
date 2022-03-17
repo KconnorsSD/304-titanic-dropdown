@@ -9,19 +9,18 @@ import plotly.graph_objs as go
 
 
 ###### Define your variables #####
-#Added in Emearl Green for St Patricks Day
+#Added in Emerald Green for St Patricks Day
 tabtitle = 'Chi Town!'
 color1='#00C957'
 color2='#FF0000'
-color3='#4876FF'
+color3='#7A67EE'
 sourceurl = 'https://vck9grfshbi2or0.studio.us-east-2.sagemaker.aws/studiolab/default/jupyter/lab/tree/intuit-ga-dat15/projects/304-titanic-dropdown/app.py'
 githublink = 'https://github.com/KconnorsSD/304-titanic-dropdown'
 
 
 ###### Import a dataframe #######
 df = pd.read_csv('Data/chicago2.csv')
-df['Baths']=df['Bath'].map({2:'two', 3:'three', 4:'four'})
-#modified data to include Condos and translated sq ft from a label to a number
+df['Home Types']=df['HouseType'].map({'Condo':'Condominiums', 'Single-Family Home':'Single Family House', 'Multi-family Home':'Multi-Family Home'})
 variables_list=['Price', 'CrimeIndex', 'MinutesToLoop', 'SchoolIndex', 'HouseSizeSqFt']
 
 ########### Initiate the app
@@ -34,7 +33,7 @@ app.title=tabtitle
 app.layout = html.Div([
     html.H1('Chicago housing data'),
     html.H2('Find your new home!'),
-    html.H3('Choose a continuous variable for summary statistics:'),
+    html.H3('Check these options to get to know the Wicker Park area:'),
     dcc.Dropdown(
         id='dropdown',
         options=[{'label': i, 'value': i} for i in variables_list],
@@ -52,25 +51,25 @@ app.layout = html.Div([
 @app.callback(Output('display-value', 'figure'),
               [Input('dropdown', 'value')])
 def display_value(continuous_var):
-    grouped_mean=df.groupby(['Baths', 'HouseType'])[continuous_var].mean()
+    grouped_mean=df.groupby(['Home Types', 'Bath'])[continuous_var].mean()
     results=pd.DataFrame(grouped_mean)
     # Create a grouped bar chart
     mydata1 = go.Bar(
-        x=results.loc['two'].index,
-        y=results.loc['two'][continuous_var],
-        name='Two Baths',
+        x=results.loc['Condominiums'].index,
+        y=results.loc['Condominiums'][continuous_var],
+        name='Condominiums',
         marker=dict(color=color1)
     )
     mydata2 = go.Bar(
-        x=results.loc['three'].index,
-        y=results.loc['three'][continuous_var],
-        name='Three Baths',
+        x=results.loc['Single Family House'].index,
+        y=results.loc['Single Family House'][continuous_var],
+        name='Single Family House',
         marker=dict(color=color2)
     )
     mydata3 = go.Bar(
-        x=results.loc['four'].index,
-        y=results.loc['four'][continuous_var],
-        name='Four Baths',
+        x=results.loc['Multi-Family Home'].index,
+        y=results.loc['Multi-Family Home'][continuous_var],
+        name='Multi-Family Home',
         marker=dict(color=color3)
     )
 
