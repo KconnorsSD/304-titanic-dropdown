@@ -9,19 +9,18 @@ import plotly.graph_objs as go
 
 
 ###### Define your variables #####
-tabtitle = 'Titanic!'
+tabtitle = 'Chi Town!'
 color1='#92A5E8'
 color2='#8E44AD'
 color3='#FFC300'
-sourceurl = 'https://www.kaggle.com/c/titanic'
-githublink = 'https://github.com/plotly-dash-apps/304-titanic-dropdown'
+sourceurl = 'https://vck9grfshbi2or0.studio.us-east-2.sagemaker.aws/studiolab/default/jupyter/lab/tree/intuit-ga-dat15/projects/304-titanic-dropdown/app.py'
+githublink = 'https://github.com/KconnorsSD/304-titanic-dropdown'
 
 
 ###### Import a dataframe #######
-df = pd.read_csv("https://raw.githubusercontent.com/austinlasseter/plotly_dash_tutorial/master/00%20resources/titanic.csv")
-df['Female']=df['Sex'].map({'male':0, 'female':1})
-df['Cabin Class'] = df['Pclass'].map({1:'first', 2: 'second', 3:'third'})
-variables_list=['Survived', 'Female', 'Fare', 'Age']
+df = pd.read_csv('Data/chicago2.csv')
+df['Baths']=df['Bath'].map({2:'two', 3:'three', 4:'four'})
+variables_list=['Price', 'CrimeIndex', 'MinutesToLoop', 'SchoolIndex', 'HouseSizeSqFt']
 
 ########### Initiate the app
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
@@ -31,6 +30,8 @@ app.title=tabtitle
 
 ####### Layout of the app ########
 app.layout = html.Div([
+    html.H1('Chicago housing data'),
+    html.H2('Find your new home!'),
     html.H3('Choose a continuous variable for summary statistics:'),
     dcc.Dropdown(
         id='dropdown',
@@ -49,31 +50,31 @@ app.layout = html.Div([
 @app.callback(Output('display-value', 'figure'),
               [Input('dropdown', 'value')])
 def display_value(continuous_var):
-    grouped_mean=df.groupby(['Cabin Class', 'Embarked'])[continuous_var].mean()
+    grouped_mean=df.groupby(['Baths', 'HouseType'])[continuous_var].mean()
     results=pd.DataFrame(grouped_mean)
     # Create a grouped bar chart
     mydata1 = go.Bar(
-        x=results.loc['first'].index,
-        y=results.loc['first'][continuous_var],
-        name='First Class',
+        x=results.loc['two'].index,
+        y=results.loc['two'][continuous_var],
+        name='Two Baths',
         marker=dict(color=color1)
     )
     mydata2 = go.Bar(
-        x=results.loc['second'].index,
-        y=results.loc['second'][continuous_var],
-        name='Second Class',
+        x=results.loc['three'].index,
+        y=results.loc['three'][continuous_var],
+        name='Three Baths',
         marker=dict(color=color2)
     )
     mydata3 = go.Bar(
-        x=results.loc['third'].index,
-        y=results.loc['third'][continuous_var],
-        name='Third Class',
+        x=results.loc['four'].index,
+        y=results.loc['four'][continuous_var],
+        name='Four Baths',
         marker=dict(color=color3)
     )
 
     mylayout = go.Layout(
         title='Grouped bar chart',
-        xaxis = dict(title = 'Port of Embarkation'), # x-axis label
+        xaxis = dict(title = 'HouseType'), # x-axis label
         yaxis = dict(title = str(continuous_var)), # y-axis label
 
     )
